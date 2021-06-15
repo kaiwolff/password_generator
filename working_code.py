@@ -5,27 +5,38 @@ import configparser
 class PasswordChecker:
 
     def take_input(self):
-        # Take full user name, year of birth. as user what option (generate, check, or exit).
+        #Take full user name, year of birth. as user what option (generate, check, or exit).
+        user_choice = None
         while True:
-            options_choices = input(
-                'Please enter one of the following options: check password(1), generate password(2) or exit(3) ')
-            if options_choices == ("3"):
+
+            while True:
+                options_choices = input('Please enter one of the following options: Check Password (1), Generate Password (2) or Exit (3) ')
+                if options_choices in ('1', '2', '3'):
+                    user_choice = options_choices
+                    break
+                else:
+                    print('Please choose a valid option')
+
+            if user_choice == '3':
                 break
+
             first_name = input('Enter your first name: ')
             last_name = input('Enter your last name: ')
-            birth_year = input('Enter your year of birth: ')
 
-            if options_choices == ('1'):
-                password = input("Please input password to check: ")
+            while True:
+                birth_year = input('Enter your year of birth: ')
+                if birth_year.isdigit() == True:
+                    break
+                else:
+                    print("Please enter a number.")
+
+
+
+            if user_choice == '1':
+                password = input('Please input password to check: ')
                 self.check_password(password, first_name, last_name, birth_year)
-            elif options_choices == ('2'):
+            elif user_choice == '2':
                 self.generate_password(first_name, last_name, birth_year)
-            elif options_choices == ("3"):
-                break
-            else:
-                print("Please choose a valid option ")
-
-            # Should be going back to option_choices
 
     def generate_password(self, user_firstname, user_lastname, user_birthyear):
 
@@ -40,13 +51,13 @@ class PasswordChecker:
             password = ""
             for character in range(max_length):
 
-                random_num = random.randint(1,4)
+                random_character = random.randint(1,4)
 
-                if random_num == 1:
+                if random_character == 1:
                     password += random.choice(allowed_characters)
-                elif random_num == 2:
+                elif random_character == 2:
                     password += random.choice(string.ascii_lowercase)
-                elif random_num == 3:
+                elif random_character == 3:
                     password += random.choice(string.ascii_uppercase)
                 else:
                     password += random.choice(string.digits)
@@ -61,14 +72,21 @@ class PasswordChecker:
 
             print(password)
 
-            # Shows the generated password and ask the user whether to generate another password using same user's information -
-            # not save the password but maybe send a report for why it is strong
+            while True:
+                write_report = input("Would you like a report on this password? (y/n) ")
+                if write_report.lower() == 'y':
+                    self.check_password(password, user_firstname, user_lastname, user_birthyear)
+                    break
+                elif write_report.lower() == "n":
+                    break
+                else:
+                    print("Please input a valid option.")
 
             while True:
                 ask_again = input("Would you like to generate a new password? (y/n) ")
-                if ask_again == "y":
+                if ask_again.lower() == "y":
                     break
-                elif ask_again == "n":
+                elif ask_again.lower() == "n":
                     break
                 else:
                     print("Please input a valid option.")
@@ -115,6 +133,16 @@ class PasswordChecker:
             report.append("This means that the password is weak")
 
         self.generate_report(report, password)
+        if not policy_compliant or not not_common or not user_detail_free:
+            while True:
+                generate_new_password = input("Would you like to have a strong password generated for you? (y/n): ")
+                if generate_new_password.lower() == "y":
+                    self.generate_password(first_name, second_name, birth_year)
+                    break
+                elif generate_new_password.lower() == "n":
+                    break
+                else:
+                    print("Please enter a valid input")
 
     def check_list(self, password):
         # checks password against passwords in common_passwords.txt. Returns True if password is not in file, False if found.Written by KW
