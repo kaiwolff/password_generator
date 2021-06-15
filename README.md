@@ -68,6 +68,8 @@ Project Tasks:
 Extra Added feature:
 - User has the option also for if they would to generate a report on the password that they were given to reveal with how the password complies with password policy. 
 
+Code for password generator:
+
 ```python
     def generate_password(self, user_firstname, user_lastname, user_birthyear):
 
