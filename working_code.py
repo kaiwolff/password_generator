@@ -30,8 +30,6 @@ class PasswordChecker:
                 else:
                     print("Please enter a number.")
 
-
-
             if user_choice == '1':
                 password = input('Please input password to check: ')
                 self.check_password(password, first_name, last_name, birth_year)
