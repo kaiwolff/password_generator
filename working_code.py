@@ -6,14 +6,17 @@ class PasswordChecker:
     def take_input(self):
         # Take full user name, year of birth. as user what option (generate, check, or exit).
         while True:
+            options_choices = input(
+                'Please enter one of the following options: check password(1), generate password(2) or exit(3) ')
+            if options_choices == ("3"):
+                break
             first_name = input('Enter your first name: ')
             last_name = input('Enter your last name: ')
             birth_year = input('Enter your year of birth: ')
-            options_choices = input('Please enter one of the following options: check password(1), generate password(2) or exit(3) ')
 
             if options_choices == ('1'):
                 password = input("Please input password to check: ")
-                self.check_password(passiword, first_name, last_name, birth_year)
+                self.check_password(password, first_name, last_name, birth_year)
             elif options_choices == ('2'):
                 self.generate_password(first_name, last_name, birth_year)
             elif options_choices == ("3"):
@@ -25,27 +28,38 @@ class PasswordChecker:
 
     def generate_password(self, user_firstname, user_lastname, user_birthyear):
 
-        policy_checklist = self.read_password_policy()
-        max_length = policy_checklist[5]
-        allowed_characters = list(policy_checklist[6])
+        while True:
 
-        password = ""
-        for character in range(max_length):
+            policy_checklist = self.read_password_policy()
+            max_length = policy_checklist[5]
+            allowed_characters = list(policy_checklist[6])
 
-            random_num = random.randint(1,4)
+            password = ""
+            for character in range(max_length):
 
-            if random_num == 1:
-                password += random.choice(allowed_characters)
-            elif random_num == 2:
-                password += random.choice(string.ascii_lowercase)
-            elif random_num == 3:
-                password += random.choice(string.ascii_uppercase)
+                random_num = random.randint(1,4)
+
+                if random_num == 1:
+                    password += random.choice(allowed_characters)
+                elif random_num == 2:
+                    password += random.choice(string.ascii_lowercase)
+                elif random_num == 3:
+                    password += random.choice(string.ascii_uppercase)
+                else:
+                    password += random.choice(string.digits)
+
+            user_details_check = self.check_user_details(password, user_firstname, user_lastname, user_birthyear)
+            if user_details_check == False:
+                # print("Regenerating a new password: ") # this is a test to check against user details
+                continue
+
+            print(password)
+
+            ask_again = input("Would you like to generate a new password? (y/n) ")
+            if ask_again == "y":
+                continue
             else:
-                password += random.choice(string.digits)
-
-        print(password)
-
-        # To do: check that the password generated does not take into username or birth year
+                break
 
     def check_password(self, password, first_name, second_name, birth_year):
         print("opened check_password")
