@@ -80,7 +80,7 @@ Code for password generator:
             max_length = policy_checklist[5]
             allowed_characters = list(policy_checklist[6])
 
-            # Generating the password using random
+            # Generating the password using random and string modules 
             password = ""
             for character in range(max_length):
 
@@ -95,7 +95,7 @@ Code for password generator:
                 else:
                     password += random.choice(string.digits)
 
-            # Checking against the user's details, password's policy and the most common password list.
+            # checking against the user's details, password's policy and the most common password list.
             user_details_check = self.check_user_details(password, user_firstname, user_lastname, user_birthyear)
             policy_compliance_check = self.check_policy(password)
             checking_list = self.check_list(password)
@@ -103,8 +103,10 @@ Code for password generator:
                 # print("Regenerating a new password: ") # this is a test to check against user details
                 continue
 
+            # shows the generated password
             print(password)
-
+            
+            # asks the user whether they would like a compliance report on their password 
             while True:
                 write_report = input("Would you like a report on this password? (y/n) ")
                 if write_report.lower() == 'y':
@@ -115,6 +117,7 @@ Code for password generator:
                 else:
                     print("Please input a valid option.")
 
+            # asks the user whether to generate another password using same user's information
             while True:
                 ask_again = input("Would you like to generate a new password? (y/n) ")
                 if ask_again.lower() == "y":
@@ -126,6 +129,4 @@ Code for password generator:
 
             if ask_again == "n":
                 break
-
-            # strongpassword.txt - give append or overwrite - ask user if they want to
 ```
