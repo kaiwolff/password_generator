@@ -8,6 +8,9 @@ class PasswordChecker:
 
     def take_input(self):
         #Take full user name, year of birth. as user what option (generate, check, or exit).
+        global sql_password
+        sql_password = getpass("Please enter the password for the sql database: ")
+
         user_choice = None
         while True:
 
@@ -112,7 +115,7 @@ class PasswordChecker:
             report.append("Does not comply with password policy")
             # print("Does not comply with password policy")
 
-        not_common = self.check_list(password)
+        not_common = self.check_list(password.lower())
         # print("common passwords checked")
 
         if not_common:
@@ -147,7 +150,7 @@ class PasswordChecker:
 
     def check_list(self, password):
         # checks password against passwords in common_passwords.txt. Returns True if password is not in file, False if found.Written by KW
-        sql_password = getpass("Please input your SQL database password: ")
+        # sql_password = getpass("Please input your SQL database password: ")
         with connect(host="localhost", user="root",password=sql_password , database="common_password_db") as connection:
 
             with connection.cursor()as cursor:
@@ -157,7 +160,7 @@ class PasswordChecker:
                 print(cursor.rowcount)
                 print(password)
                 num_occurences = cursor.rowcount
-                print("num_occurences assigned")
+                # print("num_occurences assigned")
                 cursor.close()
 
             if num_occurences > 0:
@@ -273,20 +276,20 @@ class PasswordChecker:
     # SQL Features: For now, only appending to database. Will presume a localhost-based database exist with the below settings. Later, will add method to create a database and read in a file as initial population.
     def append_password_database(self,file_name):
         #select passwords_db, append table common_passwords with the contents of a new filename
-        sql_password = getpass("Please input your SQL database password: ")
+        # sql_password = getpass("Please input your SQL database password: ")
         with connect(host="localhost", user="root",password=sql_password , database="common_password_db") as connection:
 
             with connection.cursor()as cursor:
                 with open(file_name, 'r') as password_file:
                     for line in password_file:
-                        command = f"INSERT INTO `common_passwords` (`commonpass_id`, `password`) VALUES (NULL, '{line}')";
+                        command = f"INSERT INTO `common_passwords` (`commonpass_id`, `password`) VALUES (NULL, '{line}');"
                         cursor.execute(command)
                         connection.commit()### new feature: SQL implementation for common_passwords
                         #once done, will need to adjust check_list to include new SQLmethod. Also add importation of sql capabilities.
 
     def add_password_to_database(self,password):
 
-        sql_password = getpass("Please input your SQL database password: ")
+        # sql_password = getpass("Please input your SQL database password: ")
         with connect(host="localhost", user="root",password=sql_password , database="common_password_db") as connection:
 
             with connection.cursor()as cursor:
