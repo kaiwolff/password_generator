@@ -1,6 +1,8 @@
 import string
 import random
 import configparser
+from mysql.connector import connect, Error
+from getpass import getpass
 
 class PasswordChecker:
 
@@ -145,18 +147,23 @@ class PasswordChecker:
 
     def check_list(self, password):
         # checks password against passwords in common_passwords.txt. Returns True if password is not in file, False if found.Written by KW
-        with open('common_passwords.txt', 'r') as password_file:
-            # iterates through whole file
-            for line in password_file:
-                if password in line:
-                    password_file.close()
-                    return False
-                elif line == False:
-                    # line will be empty if nothing left in file
-                    print("end of file reached")
-                    password_file.close()
-                    break
-        return True
+        sql_password = getpass("Please input your SQL database password: ")
+        with connect(host="localhost", user="root",password=sql_password , database="common_password_db") as connection:
+
+            with connection.cursor()as cursor:
+                command = f"SELECT * FROM `common_passwords` WHERE password = '{password}';"
+                cursor.execute(command)
+                cursor.fetchall()
+                print(cursor.rowcount)
+                print(password)
+                num_occurences = cursor.rowcount
+                print("num_occurences assigned")
+                cursor.close()
+
+            if num_occurences > 0:
+                return False
+            elif num_occurences == 0:
+                return True
 
     def check_policy(self, password):
         # reads password policy, checks if password complies with requirements. Returns True if yes, False if not. Written by KW
@@ -172,7 +179,7 @@ class PasswordChecker:
         allowed_specials = policy_list[6]
 
         count_specials = 0
-        count_lower = 0
+        count_lower = 0                #changin options_choices to in
         count_upper = 0
         count_numbers = 0
 
@@ -180,7 +187,7 @@ class PasswordChecker:
             # not compliant if too short or too long
             return False
 
-        for letter in password:
+        for letter in password:# print(password_tester.check_list("kais_test_password"))
             # check each letter to see if special, lower, upper, or number. Count each of these
             if letter.isdigit():
                 count_numbers += 1
@@ -263,9 +270,40 @@ class PasswordChecker:
         return [int(num_specials), int(num_lowercase), int(num_uppercase), int(num_numbers), int(min_length),
                 int(max_length), allowed_specials]
 
+    # SQL Features: For now, only appending to database. Will presume a localhost-based database exist with the below settings. Later, will add method to create a database and read in a file as initial population.
+    def append_password_database(self,file_name):
+        #select passwords_db, append table common_passwords with the contents of a new filename
+        sql_password = getpass("Please input your SQL database password: ")
+        with connect(host="localhost", user="root",password=sql_password , database="common_password_db") as connection:
+
+            with connection.cursor()as cursor:
+                with open(file_name, 'r') as password_file:
+                    for line in password_file:
+                        command = f"INSERT INTO `common_passwords` (`commonpass_id`, `password`) VALUES (NULL, '{line}')";
+                        cursor.execute(command)
+                        connection.commit()### new feature: SQL implementation for common_passwords
+                        #once done, will need to adjust check_list to include new SQLmethod. Also add importation of sql capabilities.
+
+    def add_password_to_database(self,password):
+
+        sql_password = getpass("Please input your SQL database password: ")
+        with connect(host="localhost", user="root",password=sql_password , database="common_password_db") as connection:
+
+            with connection.cursor()as cursor:
+                command = f"INSERT INTO `common_passwords` (`commonpass_id`, `password`) VALUES (NULL, '{password}')";
+                cursor.execute(command)
+                connection.commit()
+
+
     #########################TESTBED
 
-
+#
 password_tester = PasswordChecker()
 password_tester.take_input()
+# print(password_tester.check_list("kais_test_password"))
+# filename = "common_passwords.txt"
+# password_tester.append_password_database(filename)
+# print(f"added {filename} to database")
+# password_tester.add_password_to_database("kais_test_password")
+# print(f"added kais_test_password to database")
 # password_tester.generate_password("Afshana", "Begum", "1997")
