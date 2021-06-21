@@ -10,7 +10,7 @@ class PasswordChecker:
         while True:
 
             while True:
-                options_choices = input('Please enter one of the following options: Check Password (1), Generate Password (2) or Exit (3) ')
+                options_choices = input('Please enter one of the following options: Check Password (1), Generate Password (2) or Exit (3): ')
                 if options_choices in ('1', '2', '3'):
                     user_choice = options_choices
                     break
@@ -115,7 +115,7 @@ class PasswordChecker:
 
         if not_common:
             report.append("Not in list of common passwords")
-            # print("Not in list of common passwords")
+            # print("Not in list of common passwords")import
         else:
             report.append("Found in list of common passwords")
             # print("Found in list of common passwords")
@@ -263,9 +263,10 @@ class PasswordChecker:
         return [int(num_specials), int(num_lowercase), int(num_uppercase), int(num_numbers), int(min_length),
                 int(max_length), allowed_specials]
 
-    #########################TESTBED
 
+def main_func():
+    password_tester = PasswordChecker()
+    password_tester.take_input()
 
-password_tester = PasswordChecker()
-password_tester.take_input()
-# password_tester.generate_password("Afshana", "Begum", "1997")
+if __name__ == "__main__":
+    main_func()
