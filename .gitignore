@@ -3,3 +3,7 @@ Lib/
 Scripts/
 pyvenv.cfg
 .vagrant/
+build/
+env/
+venv/
+__pycache__/

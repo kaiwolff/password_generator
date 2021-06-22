@@ -1,8 +1,7 @@
 FROM python:3
-WORKDIR /usr/src/app
+ADD password_generator/working_code.py /password_generator/
+ADD password_generator/common_passwords.txt /password_generator/
+ADD password_generator/password_policy.txt /password_generator/
+WORKDIR /password_generator/
+CMD [ "python", "working_code.py" ]
 
-ADD working_code.py ./
-ADD common_passwords.txt ./
-ADD password_policy.txt ./
-
-CMD [ "python", "./working_code.py" ]
