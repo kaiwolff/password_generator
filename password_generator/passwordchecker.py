@@ -131,17 +131,19 @@ class PasswordChecker:
         else:
             report.append("This means that the password is weak")
 
-        self.generate_report(report, password)
-        if not policy_compliant or not not_common or not user_detail_free:
-            while True:
-                generate_new_password = input("Would you like to have a strong password generated for you? (y/n): ")
-                if generate_new_password.lower() == "y":
-                    self.generate_password(first_name, second_name, birth_year)
-                    break
-                elif generate_new_password.lower() == "n":
-                    break
-                else:
-                    print("Please enter a valid input")
+        # report.append(f"Password was {password}")
+        # self.generate_report(report, password)
+        # if not policy_compliant or not not_common or not user_detail_free:
+        #     while True:
+        #         generate_new_password = input("Would you like to have a strong password generated for you? (y/n): ")
+        #         if generate_new_password.lower() == "y":
+        #             self.generate_password(first_name, second_name, birth_year)
+        #             break
+        #         elif generate_new_password.lower() == "n":
+        #             break
+        #         else:
+        #             print("Please enter a valid input")
+        return report
 
     def check_list(self, password):
         # checks password against passwords in common_passwords.txt. Returns True if password is not in file, False if found.Written by KW
@@ -207,7 +209,7 @@ class PasswordChecker:
             return False
         elif user_lastname in password:
             return False
-        elif user_birthyear in password:
+        elif str(user_birthyear) in password:
             return False
         else:
             return True
@@ -264,9 +266,6 @@ class PasswordChecker:
                 int(max_length), allowed_specials]
 
 
-def main_func():
+if __name__ == "__main__":
     password_tester = PasswordChecker()
     password_tester.take_input()
-
-if __name__ == "__main__":
-    main_func()
