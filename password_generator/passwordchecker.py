@@ -69,31 +69,31 @@ class PasswordChecker:
                 continue
 
             # shows the generated password
-            print(password)
+            return(password)
 
             # asks the user whether they would like a compliance report on their password
-            while True:
-                write_report = input("Would you like a report on this password? (y/n) ")
-                if write_report.lower() == 'y':
-                    self.check_password(password, user_firstname, user_lastname, user_birthyear)
-                    break
-                elif write_report.lower() == "n":
-                    break
-                else:
-                    print("Please input a valid option.")
-
-            # asks the user whether to generate another password using same user's information
-            while True:
-                ask_again = input("Would you like to generate a new password? (y/n) ")
-                if ask_again.lower() == "y":
-                    break
-                elif ask_again.lower() == "n":
-                    break
-                else:
-                    print("Please input a valid option.")
-
-            if ask_again == "n":
-                break
+            # while True:
+            #     write_report = input("Would you like a report on this password? (y/n) ")
+            #     if write_report.lower() == 'y':
+            #         self.check_password(password, user_firstname, user_lastname, user_birthyear)
+            #         break
+            #     elif write_report.lower() == "n":
+            #         break
+            #     else:
+            #         print("Please input a valid option.")
+            #
+            # # asks the user whether to generate another password using same user's information
+            # while True:
+            #     ask_again = input("Would you like to generate a new password? (y/n) ")
+            #     if ask_again.lower() == "y":
+            #         break
+            #     elif ask_again.lower() == "n":
+            #         break
+            #     else:
+            #         print("Please input a valid option.")
+            #
+            # if ask_again == "n":
+            #     break
 
     def check_password(self, password, first_name, second_name, birth_year):
         print("opened check_password")
@@ -131,7 +131,9 @@ class PasswordChecker:
         else:
             report.append("This means that the password is weak")
 
-        # report.append(f"Password was {password}")
+        report.append(f"Password was {password}")
+
+        report.append(f"Inputs were {password}, {first_name}, {second_name}, {birth_year}")
         # self.generate_report(report, password)
         # if not policy_compliant or not not_common or not user_detail_free:
         #     while True:
@@ -209,7 +211,7 @@ class PasswordChecker:
             return False
         elif user_lastname in password:
             return False
-        elif str(user_birthyear) in password:
+        elif user_birthyear in password:
             return False
         else:
             return True
